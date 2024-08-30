@@ -34,8 +34,6 @@ pipeline {
                          <p>Build URL: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
                          <p>Please check the Jenkins console output for more details.</p>""",
                 mimeType: 'text/html',
-                retry: 3, // Retry 3 times
-                compressLog: true // Compress log if it's too large
             )
         }
         // Send an email when the build fails
@@ -49,8 +47,6 @@ pipeline {
                          <p>Build URL: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
                          <p>Please check the Jenkins console output for more details.</p>""",
                 mimeType: 'text/html',
-                retry: 3, // Retry 3 times
-                compressLog: true // Compress log if it's too large
             )
         }
     }
