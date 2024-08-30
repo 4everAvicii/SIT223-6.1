@@ -5,19 +5,19 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the project...'
-                sh 'mvn clean package'  // 实际构建命令
+                bat 'mvn clean package'  // 在Windows环境中使用bat代替sh
             }
         }
         
         stage('Unit and Integration Tests') {
             steps {
                 echo 'Running tests...'
-                sh 'mvn test'  // 运行单元测试和集成测试
+                bat 'mvn test'  // 运行单元测试和集成测试
             }
             post {
                 always {
                     emailext (
-                        to: "sandylilovehome@gmail.com",
+                        to: "wangzhi1757@gmail.com",
                         subject: "Test Phase - Build #${env.BUILD_NUMBER} - ${currentBuild.currentResult}",
                         body: '''<html>
                                     <body>
@@ -36,19 +36,19 @@ pipeline {
         stage('Code Analysis') {
             steps {
                 echo 'Analyzing code...'
-                sh 'mvn sonar:sonar'  // 运行代码分析命令
+                bat 'mvn sonar:sonar'  // 运行代码分析命令
             }
         }
         
         stage('Security Scan') {
             steps {
                 echo 'Performing security scan...'
-                sh 'mvn org.owasp:dependency-check-maven:check'  // 运行安全扫描命令
+                bat 'mvn org.owasp:dependency-check-maven:check'  // 运行安全扫描命令
             }
             post {
                 always {
                     emailext (
-                        to: "sandylilovehome@gmail.com",
+                        to: "wangzhi1757@gmail.com",
                         subject: "Security Scan - Build #${env.BUILD_NUMBER} - ${currentBuild.currentResult}",
                         body: '''<html>
                                     <body>
@@ -92,7 +92,7 @@ pipeline {
     post {
         success {
             emailext (
-                to: 'sandylilovehome@gmail.com',
+                to: 'wangzhi1757@gmail.com',
                 subject: "Jenkins Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' Success",
                 body: """<p>Build was successful!</p>
                          <p>Job Name: ${env.JOB_NAME}</p>
@@ -104,7 +104,7 @@ pipeline {
         }
         failure {
             emailext (
-                to: 'sandylilovehome@gmail.com',
+                to: 'wangzhi1757@gmail.com',
                 subject: "Jenkins Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' Failure",
                 body: """<p>Build failed.</p>
                          <p>Job Name: ${env.JOB_NAME}</p>
