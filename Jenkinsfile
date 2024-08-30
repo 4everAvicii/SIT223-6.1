@@ -5,23 +5,23 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the project...'
-                bat 'mvn clean package'  // 在Windows环境中使用bat代替sh
+                bat 'mvn clean package'
             }
         }
         
         stage('Unit and Integration Tests') {
             steps {
                 echo 'Running tests...'
-                bat 'mvn test'  // 运行单元测试和集成测试
+                bat 'mvn test'
             }
             post {
                 always {
                     emailext (
                         to: "wangzhi1757@gmail.com",
-                        subject: "Test Phase - Build #${env.BUILD_NUMBER} - ${currentBuild.currentResult}",
+                        subject: "Test Phase - Build #${env.BUILD_NUMBER} - ${currentBuild.result}",
                         body: '''<html>
                                     <body>
-                                        <p>Build Status: ${currentBuild.currentResult}</p>
+                                        <p>Build Status: ${currentBuild.result}</p>
                                         <p>Build Number: ${env.BUILD_NUMBER}</p>
                                         <p>Check the <a href="${env.BUILD_URL}">console output</a>.</p>
                                      </body>
@@ -36,23 +36,23 @@ pipeline {
         stage('Code Analysis') {
             steps {
                 echo 'Analyzing code...'
-                bat 'mvn sonar:sonar'  // 运行代码分析命令
+                bat 'mvn sonar:sonar'
             }
         }
         
         stage('Security Scan') {
             steps {
                 echo 'Performing security scan...'
-                bat 'mvn org.owasp:dependency-check-maven:check'  // 运行安全扫描命令
+                bat 'mvn org.owasp:dependency-check-maven:check'
             }
             post {
                 always {
                     emailext (
                         to: "wangzhi1757@gmail.com",
-                        subject: "Security Scan - Build #${env.BUILD_NUMBER} - ${currentBuild.currentResult}",
+                        subject: "Security Scan - Build #${env.BUILD_NUMBER} - ${currentBuild.result}",
                         body: '''<html>
                                     <body>
-                                        <p>Build Status: ${currentBuild.currentResult}</p>
+                                        <p>Build Status: ${currentBuild.result}</p>
                                         <p>Build Number: ${env.BUILD_NUMBER}</p>
                                         <p>Check the <a href="${env.BUILD_URL}">console output</a>.</p>
                                      </body>
@@ -67,24 +67,21 @@ pipeline {
         stage('Deploy to Staging') {
             steps {
                 echo 'Deploying to staging...'
-                echo 'Simulating deployment to AWS EC2 instance...'  // 模拟部署命令
-                // 实际部署到预生产环境的命令
+                echo 'Simulating deployment to AWS EC2 instance...'
             }
         }
         
         stage('Integration Tests on Staging') {
             steps {
                 echo 'Running integration tests on staging...'
-                echo 'Simulating integration testing...'  // 模拟集成测试命令
-                // 在预生产环境中运行集成测试的实际命令
+                echo 'Simulating integration testing...'
             }
         }
         
         stage('Deploy to Production') {
             steps {
                 echo 'Deploying to production...'
-                echo 'Simulating deployment to AWS EC2 instance...'  // 模拟部署命令
-                // 实际部署到生产环境的命令
+                echo 'Simulating deployment to AWS EC2 instance...'
             }
         }
     }
