@@ -5,49 +5,50 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building...'
-                // 在这里添加你的构建步骤，例如编译代码
+                // Add your build steps here, e.g., compiling code
             }
         }
         stage('Test') {
             steps {
                 echo 'Testing...'
-                // 在这里添加你的测试步骤，例如运行单元测试
+                // Add your test steps here, e.g., running unit tests
             }
         }
         stage('Deploy') {
             steps {
                 echo 'Deploying...'
-                // 在这里添加你的部署步骤，例如将代码发布到服务器
+                // Add your deployment steps here, e.g., deploying code to a server
             }
         }
     }
 
     post {
-        // 构建成功时发送邮件
+        // Send an email when the build is successful
         success {
             emailext (
                 to: 'wangzhi1757@gmail.com',
-                subject: "Jenkins Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' 成功",
-                body: """<p>构建成功！</p>
-                         <p>项目名称: ${env.JOB_NAME}</p>
-                         <p>构建编号: ${env.BUILD_NUMBER}</p>
-                         <p>构建地址: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
-                         <p>详情请查看 Jenkins 控制台输出。</p>""",
+                subject: "Jenkins Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' Success",
+                body: """<p>Build was successful!</p>
+                         <p>Job Name: ${env.JOB_NAME}</p>
+                         <p>Build Number: ${env.BUILD_NUMBER}</p>
+                         <p>Build URL: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+                         <p>Please check the Jenkins console output for more details.</p>""",
                 mimeType: 'text/html'
             )
         }
-        // 构建失败时发送邮件
+        // Send an email when the build fails
         failure {
             emailext (
                 to: 'wangzhi1757@gmail.com',
-                subject: "Jenkins Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' 失败",
-                body: """<p>构建失败。</p>
-                         <p>项目名称: ${env.JOB_NAME}</p>
-                         <p>构建编号: ${env.BUILD_NUMBER}</p>
-                         <p>构建地址: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
-                         <p>详情请查看 Jenkins 控制台输出。</p>""",
+                subject: "Jenkins Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' Failure",
+                body: """<p>Build failed.</p>
+                         <p>Job Name: ${env.JOB_NAME}</p>
+                         <p>Build Number: ${env.BUILD_NUMBER}</p>
+                         <p>Build URL: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+                         <p>Please check the Jenkins console output for more details.</p>""",
                 mimeType: 'text/html'
             )
         }
     }
 }
+
