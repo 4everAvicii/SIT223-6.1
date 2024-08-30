@@ -5,52 +5,20 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the project...'
-                bat 'mvn clean package'
+                echo 'Running: mvn clean package'
             }
         }
         
         stage('Unit and Integration Tests') {
             steps {
                 echo 'Running tests...'
-                bat 'mvn test'
+                echo 'Running: mvn test'
             }
-            post {
-                always {
-                    emailext (
-                        to: "wangzhi1757@gmail.com",
-                        subject: "Test Phase - Build #${env.BUILD_NUMBER} - ${currentBuild.result}",
-                        body: '''<html>
-                                    <body>
-                                        <p>Build Status: ${currentBuild.result}</p>
-                                        <p>Build Number: ${env.BUILD_NUMBER}</p>
-                                        <p>Check the <a href="${env.BUILD_URL}">console output</a>.</p>
-                                     </body>
-                                 </html>''',
-                        attachLog: true,
-                        mimeType: 'text/html'
-                    )
-                }
-            }
-        }
-        
-        stage('Code Analysis') {
-            steps {
-                echo 'Analyzing code...'
-                bat 'mvn sonar:sonar'
-            }
-        }
-        
-        stage('Security Scan') {
-            steps {
-                echo 'Performing security scan...'
-                echo 'Running: mvn org.owasp:dependency-check-maven:check'
-            }
-            post {
-                always {
-                    emailext (
-                        to: "wangzhi1757@gmail.com",
-                        subject: "Security Scan - Build #${env.BUILD_NUMBER} - ${currentBuild.currentResult}",
-                        body: '''<html>
+            post{
+                always{
+                   emailext ( to: "wangzhi1757@gmail.com",
+                   subject: "Test Phase - Build #${env.BUILD_NUMBER} - ${currentBuild.currentResult}",
+                   body: '''<html>
                                <body>
                                    <p>Build Status: ${BUILD_STATUS}</p>
                                    <p>Build Number: ${BUILD_NUMBER}</p>
@@ -59,9 +27,36 @@ pipeline {
                             </html>''',
                    attachLog: true,
                    mimeType: 'text/html'
-
-                    )
-                }
+                )}
+            }
+        }
+        
+        stage('Code Analysis') {
+            steps {
+                echo 'Analyzing code...'
+                echo 'Running: mvn sonar:sonar'
+            }
+        }
+        
+        stage('Security Scan') {
+            steps {
+                echo 'Performing security scan...'
+                echo 'Running: mvn org.owasp:dependency-check-maven:check'
+            }
+            post{
+                always{
+                   emailext ( to: "wangzhi1757@gmail.com",
+                   subject: "Security Scan - Build #${env.BUILD_NUMBER} - ${currentBuild.currentResult}",
+                   body: '''<html>
+                               <body>
+                                   <p>Build Status: ${BUILD_STATUS}</p>
+                                   <p>Build Number: ${BUILD_NUMBER}</p>
+                                   <p>Check the <a href="${BUILD_URL}">console output</a>.</p>
+                                </body>
+                            </html>''',
+                   attachLog: true,
+                   mimeType: 'text/html'
+                )}
             }
         }
         
@@ -86,4 +81,4 @@ pipeline {
             }
         }
     }
-
+}
